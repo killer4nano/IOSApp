@@ -13,10 +13,10 @@
 		35F114711F2F8576001ADF8E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F114701F2F8576001ADF8E /* AppDelegate.swift */; };
 		35F114731F2F8576001ADF8E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F114721F2F8576001ADF8E /* ViewController.swift */; };
 		35F114761F2F8576001ADF8E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35F114741F2F8576001ADF8E /* Main.storyboard */; };
-		35F114781F2F8576001ADF8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35F114771F2F8576001ADF8E /* Assets.xcassets */; };
 		35F1147B1F2F8576001ADF8E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35F114791F2F8576001ADF8E /* LaunchScreen.storyboard */; };
 		35F114861F2F8576001ADF8E /* ClientConnectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F114851F2F8576001ADF8E /* ClientConnectTests.swift */; };
 		35F114911F2F8576001ADF8E /* ClientConnectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F114901F2F8576001ADF8E /* ClientConnectUITests.swift */; };
+		9E35B61A1F48AF3D003425EB /* MyJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E35B6191F48AF3D003425EB /* MyJob.swift */; };
 		9EE91B561F487A220029A895 /* SecondPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE91B551F487A220029A895 /* SecondPage.swift */; };
 /* End PBXBuildFile section */
 
@@ -45,7 +45,6 @@
 		35F114701F2F8576001ADF8E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		35F114721F2F8576001ADF8E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		35F114751F2F8576001ADF8E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		35F114771F2F8576001ADF8E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		35F1147A1F2F8576001ADF8E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		35F1147C1F2F8576001ADF8E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		35F114811F2F8576001ADF8E /* ClientConnectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClientConnectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -54,6 +53,7 @@
 		35F1148C1F2F8576001ADF8E /* ClientConnectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClientConnectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		35F114901F2F8576001ADF8E /* ClientConnectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientConnectUITests.swift; sourceTree = "<group>"; };
 		35F114921F2F8576001ADF8E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9E35B6191F48AF3D003425EB /* MyJob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyJob.swift; sourceTree = "<group>"; };
 		9EE91B551F487A220029A895 /* SecondPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondPage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -107,7 +107,6 @@
 			children = (
 				35F114701F2F8576001ADF8E /* AppDelegate.swift */,
 				35F114721F2F8576001ADF8E /* ViewController.swift */,
-				35F114771F2F8576001ADF8E /* Assets.xcassets */,
 				35F114741F2F8576001ADF8E /* Main.storyboard */,
 				35F114791F2F8576001ADF8E /* LaunchScreen.storyboard */,
 				35F1147C1F2F8576001ADF8E /* Info.plist */,
@@ -115,6 +114,7 @@
 				358907611F324BE10017FF7D /* SwiftyJSON.swift */,
 				358907631F44A2740017FF7D /* ServerCommunication.swift */,
 				9EE91B551F487A220029A895 /* SecondPage.swift */,
+				9E35B6191F48AF3D003425EB /* MyJob.swift */,
 			);
 			path = ClientConnect;
 			sourceTree = "<group>";
@@ -245,7 +245,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				35F1147B1F2F8576001ADF8E /* LaunchScreen.storyboard in Resources */,
-				35F114781F2F8576001ADF8E /* Assets.xcassets in Resources */,
 				35F114761F2F8576001ADF8E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -272,6 +271,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				358907641F44A2740017FF7D /* ServerCommunication.swift in Sources */,
+				9E35B61A1F48AF3D003425EB /* MyJob.swift in Sources */,
 				35F114731F2F8576001ADF8E /* ViewController.swift in Sources */,
 				9EE91B561F487A220029A895 /* SecondPage.swift in Sources */,
 				358907601F324BAE0017FF7D /* Tasks.swift in Sources */,

@@ -109,9 +109,14 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
     
     @IBAction func myJob(_ sender: Any) {
         if (currentTask != nil) {
-            
+            let myJob = self.storyboard!.instantiateViewController(withIdentifier: "MyJob") as! MyJob
+            self.navigationController!.present(myJob, animated: true)
+            myJob.nameOfTask = (currentTask?.getName())!
+            myJob.descriptionOfTask = (currentTask?.getDescription())!
+            myJob.setText()
         }else {
             showMessage(message: "You are currently not doing anything!")
+            
         }
     }
     func showDescription(task: Tasks){
@@ -119,8 +124,9 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         
         refreshAlert.addAction(UIAlertAction(title: "Accept", style: .default, handler: { (action: UIAlertAction!) in
             if (self.acceptTask(task: task)) {
-                self.showMessage(message: "Go and do you job!")
                 self.currentTask = task
+                self.showMessage(message: "Go and do you job!" + (self.currentTask?.getName())!)
+                
             }else {
                 self.showMessage(message: "Someone else stole the job from you! Please pick another one")
             }
