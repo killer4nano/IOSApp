@@ -17,7 +17,7 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
     var name: String = ""
     var userId:String = ""
     var currentTask:Tasks? = nil
-
+    @IBOutlet weak var myJob: UIButton!
 
     @IBOutlet weak var out: UITableView!
     override func viewDidLoad()
@@ -45,7 +45,6 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let row = indexPath.row
-        print(listOfTasks[row].getDescription())
         showDescription(task: listOfTasks[row])
         
     }
@@ -94,16 +93,18 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         var jsonObj:JSON = ""
         
         let task = URLSession.shared.dataTask(with: url! as URL) {(data, response, error) in
-            jsonObj = try! JSON(data: data!)
-            if (jsonObj.count > 0) {
+            let string = (NSString(data: data!, encoding: String.Encoding.utf8.rawValue) ?? "")
+            if (string != "") {
+                jsonObj = try! JSON(data: data!)
                 self.currentTask = Tasks(id: jsonObj["id"].int!,name: jsonObj["taskName"].string!, description: jsonObj["taskDescription"].string!,tech: jsonObj["tech"].string!,notes: jsonObj["notes"].string!)
-
             }
-            
             semaphore.signal()
         }
         task.resume()
         semaphore.wait()
+        if (currentTask != nil) {
+            myJob.backgroundColor = UIColor(hex: "ffffbb33")
+        }
         
     }
 
@@ -141,6 +142,7 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
             
         }
     }
+    
     func showDescription(task: Tasks){
         let refreshAlert = UIAlertController(title: task.getName(), message: task.getDescription(), preferredStyle: UIAlertControllerStyle.alert)
         
