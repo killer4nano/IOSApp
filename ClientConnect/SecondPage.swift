@@ -27,7 +27,6 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         out.delegate = self
         out.register(UITableViewCell.self, forCellReuseIdentifier: "customcell")
         grabData()
-        print(userId)
     }
     
     
@@ -38,6 +37,8 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = out.dequeueReusableCell(withIdentifier: "customcell", for: indexPath)
         cell.textLabel?.text = taskNames[indexPath.row]
+        cell.backgroundColor = UIColor(hex: "000000")
+        cell.textLabel?.textColor = UIColor(hex: "FFFFFF")
         return cell
     }
     
@@ -94,7 +95,6 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         
         let task = URLSession.shared.dataTask(with: url! as URL) {(data, response, error) in
             jsonObj = try! JSON(data: data!)
-            print(jsonObj)
             if (jsonObj.count > 0) {
                 self.currentTask = Tasks(id: jsonObj["id"].int!,name: jsonObj["taskName"].string!, description: jsonObj["taskDescription"].string!,tech: jsonObj["tech"].string!,notes: jsonObj["notes"].string!)
 
@@ -145,18 +145,21 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         let refreshAlert = UIAlertController(title: task.getName(), message: task.getDescription(), preferredStyle: UIAlertControllerStyle.alert)
         
         refreshAlert.addAction(UIAlertAction(title: "Accept", style: .default, handler: { (action: UIAlertAction!) in
-            if (self.acceptTask(task: task)) {
-                self.currentTask = task
-                self.showMessage(message: "Go and do you job!" + (self.currentTask?.getName())!)
-                
+            if(self.currentTask == nil) {
+                if (self.acceptTask(task: task)) {
+                    self.currentTask = task
+                    self.showMessage(message: "Go and do you job!")
+                }else {
+                    self.showMessage(message: "Someone else stole the job from you! Please pick another one")
+                }
+                self.grabData()
             }else {
-                self.showMessage(message: "Someone else stole the job from you! Please pick another one")
+                self.showMessage(message: "You can't do more than 1 job!")
             }
-            self.grabData()
         }))
         
         refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
-            print("Handle Cancel Logic here")
+            //Don't need to do anything when they click cancel
         }))
         
         present(refreshAlert, animated: true, completion: nil)
@@ -166,7 +169,7 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         let refreshAlert = UIAlertController(title: "Message", message: message, preferredStyle: UIAlertControllerStyle.alert)
         
         refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
-            //print("Handle Ok logic here")
+            //Don't need to do anything if they press ok.
         }))
         
        
@@ -174,6 +177,30 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         present(refreshAlert, animated: true, completion: nil)
     }
     
+    
+    
 
+}
+
+extension UIColor {
+    
+    convenience init(hex: String) {
+        let scanner = Scanner(string: hex)
+        scanner.scanLocation = 0
+        
+        var rgbValue: UInt64 = 0
+        
+        scanner.scanHexInt64(&rgbValue)
+        
+        let r = (rgbValue & 0xff0000) >> 16
+        let g = (rgbValue & 0xff00) >> 8
+        let b = rgbValue & 0xff
+        
+        self.init(
+            red: CGFloat(r) / 0xff,
+            green: CGFloat(g) / 0xff,
+            blue: CGFloat(b) / 0xff, alpha: 1
+        )
+    }
 }
 
