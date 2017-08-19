@@ -51,6 +51,7 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
     
 
     func grabData() {
+        myTask()
         grabTasks(passedListOfTasks: &listOfTasks,passedStringArray: &taskNames)
         out.reloadData()
     }
@@ -66,7 +67,7 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
             jsonObj = try! JSON(data: data!)
             var count = 0
             while (count < jsonObj.count) {
-                listOfTasks.append(Tasks(name: jsonObj[count]["taskName"].string!, description: jsonObj[count]["taskDescription"].string!,tech: jsonObj[count]["tech"].string!,notes: jsonObj[count]["notes"].string!))
+                listOfTasks.append(Tasks(id: jsonObj[count]["id"].int!,name: jsonObj[count]["taskName"].string!, description: jsonObj[count]["taskDescription"].string!,tech: jsonObj[count]["tech"].string!,notes: jsonObj[count]["notes"].string!))
                 
                 count += 1
             }
@@ -85,6 +86,27 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         passedStringArray = taskNames
         
     }
+    
+    func myTask(){
+        let url = NSURL(string: "http:/"+computerName+":8080/mytask/"+userId)
+        let semaphore = DispatchSemaphore(value: 0)
+        var jsonObj:JSON = ""
+        
+        let task = URLSession.shared.dataTask(with: url! as URL) {(data, response, error) in
+            jsonObj = try! JSON(data: data!)
+            print(jsonObj)
+            if (jsonObj.count > 0) {
+                self.currentTask = Tasks(id: jsonObj["id"].int!,name: jsonObj["taskName"].string!, description: jsonObj["taskDescription"].string!,tech: jsonObj["tech"].string!,notes: jsonObj["notes"].string!)
+
+            }
+            
+            semaphore.signal()
+        }
+        task.resume()
+        semaphore.wait()
+        
+    }
+
     func acceptTask(task: Tasks) -> Bool{
         var string:NSString = ""
         let stringUrl = "/accept/"+userId+"/"+name+"/"+task.getName()

@@ -14,14 +14,16 @@ class Tasks{
     var notes:String
     var sos:Bool
     var completed:Bool
+    var id:Int
     
-    init(name: String, description: String,tech: String,notes: String) {
+    init(id: Int,name: String, description: String,tech: String,notes: String) {
         self.name = name
         self.description = description
         self.tech = tech
         self.sos = false
         self.notes = notes
         self.completed = false
+        self.id = id
     }
     
     func getName() -> String {
