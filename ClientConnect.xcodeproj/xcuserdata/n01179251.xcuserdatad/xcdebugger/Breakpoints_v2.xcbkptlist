@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ClientConnect/SecondPage.swift"
-            timestampString = "524863452.247727"
+            timestampString = "524935869.53869"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "114"
-            endingLineNumber = "114"
+            startingLineNumber = "173"
+            endingLineNumber = "173"
             landmarkName = "acceptTask(task:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ClientConnect/SecondPage.swift"
-            timestampString = "524863452.247727"
+            timestampString = "524935869.53869"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
             landmarkName = "acceptTask(task:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ClientConnect/SecondPage.swift"
-            timestampString = "524863452.247727"
+            timestampString = "524935869.53869"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "135"
-            endingLineNumber = "135"
+            startingLineNumber = "194"
+            endingLineNumber = "194"
             landmarkName = "myJob(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -106,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ClientConnect/SecondPage.swift"
-            timestampString = "524863452.247727"
+            timestampString = "524935869.53869"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "137"
-            endingLineNumber = "137"
+            startingLineNumber = "196"
+            endingLineNumber = "196"
             landmarkName = "myJob(_:)"
             landmarkType = "7">
             <Locations>
@@ -154,12 +154,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ClientConnect/SecondPage.swift"
-            timestampString = "524863452.247727"
+            timestampString = "524935869.53869"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "138"
-            endingLineNumber = "138"
+            startingLineNumber = "197"
+            endingLineNumber = "197"
             landmarkName = "myJob(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ClientConnect/SecondPage.swift"
+            timestampString = "524935869.53869"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
+            landmarkName = "showDescription(row:isSos:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

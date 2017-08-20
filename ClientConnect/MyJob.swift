@@ -13,6 +13,7 @@ class MyJob: UIViewController
     
     @IBOutlet weak var top: UILabel!
     @IBOutlet weak var bottom: UILabel!
+    @IBOutlet weak var sosButton: UIButton!
     
     var nameOfTask = ""
     var descriptionOfTask = ""

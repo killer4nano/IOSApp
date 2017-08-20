@@ -12,6 +12,7 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
 {
     
     var listOfTasks = [Tasks]()
+    var listOfSosTasks = [SosTasks]()
     var taskNames = [String]()
     let computerName:String = "10.117.80.139"
     var name: String = ""
@@ -29,7 +30,6 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         grabData()
     }
     
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return taskNames.count
     }
@@ -37,7 +37,11 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = out.dequeueReusableCell(withIdentifier: "customcell", for: indexPath)
         cell.textLabel?.text = taskNames[indexPath.row]
-        cell.backgroundColor = UIColor(hex: "000000")
+        if (indexPath.row < listOfSosTasks.count) {
+            cell.backgroundColor = UIColor(hex: "FF0000")
+        }else {
+            cell.backgroundColor = UIColor(hex: "000000")
+        }
         cell.textLabel?.textColor = UIColor(hex: "FFFFFF")
         return cell
     }
@@ -45,13 +49,18 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let row = indexPath.row
-        showDescription(task: listOfTasks[row])
+        if (row < listOfSosTasks.count) {
+            showDescription(row: row, isSos: true)
+        }else {
+            showDescription(row: row, isSos: false)
+        }
         
     }
     
 
     func grabData() {
         myTask()
+        grabSosTasks(passedListOfTasks: &listOfSosTasks, passedStringArray: &taskNames)
         grabTasks(passedListOfTasks: &listOfTasks,passedStringArray: &taskNames)
         out.reloadData()
     }
@@ -73,6 +82,37 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
             }
             
             count = 0
+            while (count  < listOfTasks.count) {
+                taskNames.append(listOfTasks[count].getName())
+                count += 1
+            }
+            semaphore.signal()
+        }
+        task.resume()
+        semaphore.wait()
+        
+        passedListOfTasks = listOfTasks
+        passedStringArray += taskNames
+        
+    }
+    
+    func grabSosTasks(passedListOfTasks:  inout [SosTasks],passedStringArray: inout [String]){
+        let url = NSURL(string: "http:/"+computerName+":8080/sostasks")
+        let semaphore = DispatchSemaphore(value: 0)
+        var jsonObj:JSON = []
+        var listOfTasks:[SosTasks] = []
+        var taskNames:[String] = []
+        
+        let task = URLSession.shared.dataTask(with: url! as URL) {(data, response, error) in
+            jsonObj = try! JSON(data: data!)
+            var count = 0
+            while (count < jsonObj.count) {
+                listOfTasks.append(SosTasks(name: jsonObj[count]["name"].string!, description: jsonObj[count]["description"].string!,notes: jsonObj[count]["notes"].string!))
+                
+                count += 1
+            }
+            
+            count = 0
             while (count < listOfTasks.count) {
                 taskNames.append(listOfTasks[count].getName())
                 count += 1
@@ -86,6 +126,7 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         passedStringArray = taskNames
         
     }
+
     
     func myTask(){
         let url = NSURL(string: "http:/"+computerName+":8080/mytask/"+userId)
@@ -102,8 +143,26 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         }
         task.resume()
         semaphore.wait()
+        
         if (currentTask != nil) {
-            myJob.backgroundColor = UIColor(hex: "ffffbb33")
+            let url2 = NSURL(string: "http:/"+computerName+":8080/issos/"+String(currentTask!.getId()))
+            let semaphore2 = DispatchSemaphore(value: 0)
+            let task2 = URLSession.shared.dataTask(with: url2! as URL) {(data, response, error) in
+                let string = (NSString(data: data!, encoding: String.Encoding.utf8.rawValue) ?? "")
+                if (string == "yes") {
+                    self.currentTask?.setSos(boolean: true)
+                }
+                semaphore2.signal()
+            }
+            task2.resume()
+            semaphore2.wait()
+        
+        
+            if (currentTask?.isSos())! {
+                myJob.backgroundColor = UIColor(hex: "FF0000")
+            }else {
+                myJob.backgroundColor = UIColor(hex: "ffffbb33")
+            }
         }
         
     }
@@ -112,8 +171,8 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         var string:NSString = ""
         let stringUrl = "/accept/"+userId+"/"+name+"/"+task.getName()
         let fullUrl = "http:/"+computerName+":8080"+stringUrl
-        let urlPath = NSString(format: fullUrl as NSString).addingPercentEscapes(using: String.Encoding.utf8.rawValue)!
-        let url = URL(string: urlPath)
+        let urlPath = String(format: (fullUrl as NSString) as String).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+        let url = URL(string: urlPath!)
         let semaphore = DispatchSemaphore(value: 0)
         let task1 = URLSession.shared.dataTask(with: url!) {(data, response, error) in
             string = (NSString(data: data!, encoding: String.Encoding.utf8.rawValue) ?? "")            //string = data
@@ -137,34 +196,47 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
             myJob.nameOfTask = (currentTask?.getName())!
             myJob.descriptionOfTask = (currentTask?.getDescription())!
             myJob.setText()
+            if (currentTask?.isSos())! {
+                myJob.sosButton.backgroundColor = UIColor(hex: "FF0000")
+            }
         }else {
             showMessage(message: "You are currently not doing anything!")
             
         }
     }
     
-    func showDescription(task: Tasks){
-        let refreshAlert = UIAlertController(title: task.getName(), message: task.getDescription(), preferredStyle: UIAlertControllerStyle.alert)
-        
-        refreshAlert.addAction(UIAlertAction(title: "Accept", style: .default, handler: { (action: UIAlertAction!) in
-            if(self.currentTask == nil) {
-                if (self.acceptTask(task: task)) {
-                    self.currentTask = task
-                    self.showMessage(message: "Go and do you job!")
+    func showDescription(row: Int,isSos: Bool){
+        if (isSos) {
+            let task:SosTasks = listOfSosTasks[row]
+            let refreshAlert = UIAlertController(title: task.getName(), message: task.getDescription() + "\r\n" + task.getNotes(), preferredStyle: UIAlertControllerStyle.alert)
+            refreshAlert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: { (action: UIAlertAction!) in
+                //Don't need to do anything when they click Ok
+            }))
+            
+            present(refreshAlert, animated: true, completion: nil)
+        }else {
+            let task:Tasks = listOfTasks[row - listOfSosTasks.count]
+            let refreshAlert = UIAlertController(title: task.getName(), message: task.getDescription(), preferredStyle: UIAlertControllerStyle.alert)
+            refreshAlert.addAction(UIAlertAction(title: "Accept", style: .default, handler: { (action: UIAlertAction!) in
+                if(self.currentTask == nil) {
+                    if (self.acceptTask(task: task)) {
+                        self.currentTask = task
+                        self.showMessage(message: "Go and do you job!")
+                    }else {
+                        self.showMessage(message: "Someone else stole the job from you! Please pick another one")
+                    }
+                    self.grabData() // REMOVE LATER
                 }else {
-                    self.showMessage(message: "Someone else stole the job from you! Please pick another one")
+                    self.showMessage(message: "You can't do more than 1 job!")
                 }
-                self.grabData()
-            }else {
-                self.showMessage(message: "You can't do more than 1 job!")
-            }
-        }))
+            }))
         
-        refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
-            //Don't need to do anything when they click cancel
-        }))
+            refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+                //Don't need to do anything when they click cancel
+            }))
         
-        present(refreshAlert, animated: true, completion: nil)
+            present(refreshAlert, animated: true, completion: nil)
+        }
     }
     
     func showMessage(message: String){
@@ -179,8 +251,7 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         present(refreshAlert, animated: true, completion: nil)
     }
     
-    
-    
+       
 
 }
 

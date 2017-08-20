@@ -33,4 +33,17 @@ class Tasks{
     func getDescription() -> String {
         return description
     }
+    
+    func getId() -> Int {
+        return id
+    }
+    
+    func setSos(boolean: Bool) {
+        sos = boolean
+    }
+    
+    
+    func isSos() -> Bool {
+        return sos
+    }
 }

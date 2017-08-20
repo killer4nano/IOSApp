@@ -134,6 +134,7 @@
                     </view>
                     <connections>
                         <outlet property="bottom" destination="0ZY-bb-6Qn" id="H35-70-Wmm"/>
+                        <outlet property="sosButton" destination="gBW-jB-MvU" id="qz6-hH-1P5"/>
                         <outlet property="top" destination="LhQ-jp-kDk" id="84D-pT-cCe"/>
                     </connections>
                 </viewController>
