@@ -110,12 +110,18 @@
                                         <state key="normal" title="SOS">
                                             <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="sos:" destination="5ki-2F-8Fn" eventType="touchUpInside" id="Bat-lb-FvH"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="doA-ig-nCI">
                                         <rect key="frame" x="98" y="312" width="72" height="43"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.0" green="0.97800916429999996" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="FINISH"/>
+                                        <connections>
+                                            <action selector="finish:" destination="5ki-2F-8Fn" eventType="touchUpInside" id="BOr-Zz-6AO"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5oQ-w7-S8H">
                                         <rect key="frame" x="169" y="312" width="90" height="43"/>

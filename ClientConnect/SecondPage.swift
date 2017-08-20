@@ -95,6 +95,93 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         passedStringArray += taskNames
         
     }
+    func sos(notes: String){
+        let this = "/"+currentTask!.getName()+"/"+currentTask!.getDescription()
+        let stringUrl = "/sos/"+String(currentTask!.getId())+this
+        let fullUrl = "http:/"+computerName+":8080"+stringUrl+"/"+notes
+        let urlPath = NSString(format: fullUrl as NSString).addingPercentEscapes(using: String.Encoding.utf8.rawValue)!
+        let url = URL(string: urlPath)
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        let task = URLSession.shared.dataTask(with: url!) {(data, response, error) in
+            semaphore.signal()
+        }
+        task.resume()
+        semaphore.wait()
+    }
+    
+    func finish(notes: String){
+        let this = "/"+String(currentTask!.getId())+"/"+currentTask!.getName()+"/"+currentTask!.getDescription()
+        let stringUrl = "/finish/"+userId+this
+        let fullUrl = "http:/"+computerName+":8080"+stringUrl+"/"+notes
+        let urlPath = NSString(format: fullUrl as NSString).addingPercentEscapes(using: String.Encoding.utf8.rawValue)!
+        let url = URL(string: urlPath)
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        let task = URLSession.shared.dataTask(with: url!) {(data, response, error) in
+            semaphore.signal()
+        }
+        task.resume()
+        semaphore.wait()
+        currentTask = nil
+        myJob.backgroundColor = UIColor(hex: "00FF00")
+    }
+    
+    func noSos(){
+        let stringUrl = "/nosos/"+String(currentTask!.getId())+"/"+currentTask!.getName()
+        let fullUrl = "http:/"+computerName+":8080"+stringUrl
+        let urlPath = NSString(format: fullUrl as NSString).addingPercentEscapes(using: String.Encoding.utf8.rawValue)!
+        let url = URL(string: urlPath)
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        let task = URLSession.shared.dataTask(with: url!) {(data, response, error) in
+            semaphore.signal()
+        }
+        task.resume()
+        semaphore.wait()
+    }
+
+    
+    func myTask(){
+        let url = URL(string: "http:/"+computerName+":8080/mytask/"+userId)
+        let semaphore = DispatchSemaphore(value: 0)
+        var jsonObj:JSON = ""
+        
+        let task = URLSession.shared.dataTask(with: url!) {(data, response, error) in
+            let string = (NSString(data: data!, encoding: String.Encoding.utf8.rawValue) ?? "")
+            if (string != "") {
+                jsonObj = try! JSON(data: data!)
+                self.currentTask = Tasks(id: jsonObj["id"].int!,name: jsonObj["taskName"].string!, description: jsonObj["taskDescription"].string!,tech: jsonObj["tech"].string!,notes: jsonObj["notes"].string!)
+            }
+            semaphore.signal()
+        }
+        task.resume()
+        semaphore.wait()
+        
+        if (currentTask != nil) {
+            let url2 = URL(string: "http:/"+computerName+":8080/issos/"+String(currentTask!.getId()))
+            let semaphore2 = DispatchSemaphore(value: 0)
+            let task2 = URLSession.shared.dataTask(with: url2!) {(data, response, error) in
+                let string = (NSString(data: data!, encoding: String.Encoding.utf8.rawValue) ?? "")
+                if (string == "yes") {
+                    self.currentTask?.setSos(boolean: true)
+                }
+                semaphore2.signal()
+            }
+            task2.resume()
+            semaphore2.wait()
+            
+            
+            if (currentTask?.isSos())! {
+                myJob.backgroundColor = UIColor(hex: "FF0000")
+            }else {
+                myJob.backgroundColor = UIColor(hex: "ffffbb33")
+            }
+        }
+        
+    }
+
+
     
     func grabSosTasks(passedListOfTasks:  inout [SosTasks],passedStringArray: inout [String]){
         let url = NSURL(string: "http:/"+computerName+":8080/sostasks")
@@ -128,51 +215,13 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
     }
 
     
-    func myTask(){
-        let url = NSURL(string: "http:/"+computerName+":8080/mytask/"+userId)
-        let semaphore = DispatchSemaphore(value: 0)
-        var jsonObj:JSON = ""
-        
-        let task = URLSession.shared.dataTask(with: url! as URL) {(data, response, error) in
-            let string = (NSString(data: data!, encoding: String.Encoding.utf8.rawValue) ?? "")
-            if (string != "") {
-                jsonObj = try! JSON(data: data!)
-                self.currentTask = Tasks(id: jsonObj["id"].int!,name: jsonObj["taskName"].string!, description: jsonObj["taskDescription"].string!,tech: jsonObj["tech"].string!,notes: jsonObj["notes"].string!)
-            }
-            semaphore.signal()
-        }
-        task.resume()
-        semaphore.wait()
-        
-        if (currentTask != nil) {
-            let url2 = NSURL(string: "http:/"+computerName+":8080/issos/"+String(currentTask!.getId()))
-            let semaphore2 = DispatchSemaphore(value: 0)
-            let task2 = URLSession.shared.dataTask(with: url2! as URL) {(data, response, error) in
-                let string = (NSString(data: data!, encoding: String.Encoding.utf8.rawValue) ?? "")
-                if (string == "yes") {
-                    self.currentTask?.setSos(boolean: true)
-                }
-                semaphore2.signal()
-            }
-            task2.resume()
-            semaphore2.wait()
-        
-        
-            if (currentTask?.isSos())! {
-                myJob.backgroundColor = UIColor(hex: "FF0000")
-            }else {
-                myJob.backgroundColor = UIColor(hex: "ffffbb33")
-            }
-        }
-        
-    }
-
+    
     func acceptTask(task: Tasks) -> Bool{
         var string:NSString = ""
         let stringUrl = "/accept/"+userId+"/"+name+"/"+task.getName()
         let fullUrl = "http:/"+computerName+":8080"+stringUrl
-        let urlPath = String(format: (fullUrl as NSString) as String).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
-        let url = URL(string: urlPath!)
+        let urlPath = NSString(format: fullUrl as NSString).addingPercentEscapes(using: String.Encoding.utf8.rawValue)!
+        let url = URL(string: urlPath)
         let semaphore = DispatchSemaphore(value: 0)
         let task1 = URLSession.shared.dataTask(with: url!) {(data, response, error) in
             string = (NSString(data: data!, encoding: String.Encoding.utf8.rawValue) ?? "")            //string = data
@@ -199,6 +248,7 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
             if (currentTask?.isSos())! {
                 myJob.sosButton.backgroundColor = UIColor(hex: "FF0000")
             }
+            myJob.secondPage = self;
         }else {
             showMessage(message: "You are currently not doing anything!")
             
