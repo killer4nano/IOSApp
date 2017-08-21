@@ -111,6 +111,9 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
     }
     
     func finish(notes: String){
+        if(currentTask!.isSos()) {
+            noSos()
+        }
         let this = "/"+String(currentTask!.getId())+"/"+currentTask!.getName()+"/"+currentTask!.getDescription()
         let stringUrl = "/finish/"+userId+this
         let fullUrl = "http:/"+computerName+":8080"+stringUrl+"/"+notes
