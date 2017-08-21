@@ -18,7 +18,7 @@ class MyJob: UIViewController
     
     
     
-    var secondPage:SecondPage? = nil
+    var secondPage:SecondPage! = nil
     var nameOfTask = ""
     var descriptionOfTask = ""
     
@@ -38,19 +38,19 @@ class MyJob: UIViewController
     }
     
     @IBAction func sos(_ sender: Any) {
-        if(secondPage?.currentTask?.isSos())! {
-            secondPage?.noSos()
+        if(secondPage!.currentTask?.isSos())! {
+            secondPage!.noSos()
         }else {
-            secondPage?.sos(notes: "test")
+            secondPage!.sos(notes: "test")
         }
-        secondPage?.grabData()
+        secondPage!.grabData()
         dismiss(animated:true)
         
     }
     
     @IBAction func finish(_ sender: Any) {
-        secondPage?.finish(notes: "test")
-        secondPage?.grabData()
+        secondPage!.finish(notes: "test")
+        secondPage!.grabData()
         dismiss(animated: true)
     }
 }

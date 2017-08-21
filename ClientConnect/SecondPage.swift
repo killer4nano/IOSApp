@@ -1,10 +1,3 @@
-//
-//  SecondPage.swift
-//  ClientConnect
-//
-//  Created by Ali Khaliq on 8/19/17.
-//  Copyright © 2017 Humber. All rights reserved.
-//
 
 import UIKit
 
@@ -19,7 +12,7 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
     var userId:String = ""
     var currentTask:Tasks? = nil
     @IBOutlet weak var myJob: UIButton!
-
+    
     @IBOutlet weak var out: UITableView!
     override func viewDidLoad()
     {
@@ -57,7 +50,7 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         
     }
     
-
+    
     func grabData() {
         myTask()
         grabSosTasks(passedListOfTasks: &listOfSosTasks, passedStringArray: &taskNames)
@@ -96,11 +89,13 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         
     }
     func sos(notes: String){
-        let this = "/"+currentTask!.getName()+"/"+currentTask!.getDescription()
+        let trimmed = currentTask!.getDescription().replacingOccurrences(of: "\r\n", with: "+")
+        let this = "/"+currentTask!.getName()+"/"+trimmed
         let stringUrl = "/sos/"+String(currentTask!.getId())+this
         let fullUrl = "http:/"+computerName+":8080"+stringUrl+"/"+notes
-        let urlPath = NSString(format: fullUrl as NSString).addingPercentEscapes(using: String.Encoding.utf8.rawValue)!
-        let url = URL(string: urlPath)
+        //let urlPath = NSString(format: fullUrl as NSString).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+        let url = URL(string: fullUrl)
+        print(url ?? "none")
         let semaphore = DispatchSemaphore(value: 0)
         
         let task = URLSession.shared.dataTask(with: url!) {(data, response, error) in
@@ -114,11 +109,12 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         if(currentTask!.isSos()) {
             noSos()
         }
-        let this = "/"+String(currentTask!.getId())+"/"+currentTask!.getName()+"/"+currentTask!.getDescription()
+        let trimmed = currentTask!.getDescription().replacingOccurrences(of: "\r\n", with: "+")
+        let this = "/"+String(currentTask!.getId())+"/"+currentTask!.getName()+"/"+trimmed
         let stringUrl = "/finish/"+userId+this
         let fullUrl = "http:/"+computerName+":8080"+stringUrl+"/"+notes
-        let urlPath = NSString(format: fullUrl as NSString).addingPercentEscapes(using: String.Encoding.utf8.rawValue)!
-        let url = URL(string: urlPath)
+        //let urlPath = NSString(format: fullUrl as NSString).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+        let url = URL(string: fullUrl)
         let semaphore = DispatchSemaphore(value: 0)
         
         let task = URLSession.shared.dataTask(with: url!) {(data, response, error) in
@@ -133,7 +129,7 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
     func noSos(){
         let stringUrl = "/nosos/"+String(currentTask!.getId())+"/"+currentTask!.getName()
         let fullUrl = "http:/"+computerName+":8080"+stringUrl
-        let urlPath = NSString(format: fullUrl as NSString).addingPercentEscapes(using: String.Encoding.utf8.rawValue)!
+        let urlPath = NSString(format: fullUrl as NSString).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
         let url = URL(string: urlPath)
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -143,7 +139,7 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         task.resume()
         semaphore.wait()
     }
-
+    
     
     func myTask(){
         let url = URL(string: "http:/"+computerName+":8080/mytask/"+userId)
@@ -167,7 +163,7 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
             let task2 = URLSession.shared.dataTask(with: url2!) {(data, response, error) in
                 let string = (NSString(data: data!, encoding: String.Encoding.utf8.rawValue) ?? "")
                 if (string == "yes") {
-                    self.currentTask?.setSos(boolean: true)
+                    self.currentTask!.setSos(boolean: true)
                 }
                 semaphore2.signal()
             }
@@ -175,7 +171,7 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
             semaphore2.wait()
             
             
-            if (currentTask?.isSos())! {
+            if currentTask!.isSos() {
                 myJob.backgroundColor = UIColor(hex: "FF0000")
             }else {
                 myJob.backgroundColor = UIColor(hex: "ffffbb33")
@@ -183,8 +179,8 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         }
         
     }
-
-
+    
+    
     
     func grabSosTasks(passedListOfTasks:  inout [SosTasks],passedStringArray: inout [String]){
         let url = NSURL(string: "http:/"+computerName+":8080/sostasks")
@@ -216,14 +212,14 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         passedStringArray = taskNames
         
     }
-
+    
     
     
     func acceptTask(task: Tasks) -> Bool{
         var string:NSString = ""
         let stringUrl = "/accept/"+userId+"/"+name+"/"+task.getName()
         let fullUrl = "http:/"+computerName+":8080"+stringUrl
-        let urlPath = NSString(format: fullUrl as NSString).addingPercentEscapes(using: String.Encoding.utf8.rawValue)!
+        let urlPath = NSString(format: fullUrl as NSString).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
         let url = URL(string: urlPath)
         let semaphore = DispatchSemaphore(value: 0)
         let task1 = URLSession.shared.dataTask(with: url!) {(data, response, error) in
@@ -283,15 +279,18 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
                     self.showMessage(message: "You can't do more than 1 job!")
                 }
             }))
-        
+            
             refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
                 //Don't need to do anything when they click cancel
             }))
-        
+            
             present(refreshAlert, animated: true, completion: nil)
         }
     }
     
+    @IBAction func refresh(_ sender: Any) {
+        grabData()
+    }
     func showMessage(message: String){
         let refreshAlert = UIAlertController(title: "Message", message: message, preferredStyle: UIAlertControllerStyle.alert)
         
@@ -299,13 +298,13 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
             //Don't need to do anything if they press ok.
         }))
         
-       
+        
         
         present(refreshAlert, animated: true, completion: nil)
     }
     
-       
-
+    
+    
 }
 
 extension UIColor {
@@ -329,4 +328,3 @@ extension UIColor {
         )
     }
 }
-
