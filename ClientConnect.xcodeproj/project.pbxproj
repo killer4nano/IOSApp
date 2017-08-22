@@ -63,6 +63,7 @@
 		35F114921F2F8576001ADF8E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3E11D12EB0B36AFC2A3CDAE8 /* Pods_ClientConnectUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClientConnectUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		44864FCFE0DC59B7C5DDEFF3 /* Pods_ClientConnect.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClientConnect.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E6DF6731F4CB80400378665 /* ClientConnect.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ClientConnect.entitlements; sourceTree = "<group>"; };
 		7749FB55E9AECD91BEA95407 /* Pods-ClientConnect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClientConnect.release.xcconfig"; path = "Pods/Target Support Files/Pods-ClientConnect/Pods-ClientConnect.release.xcconfig"; sourceTree = "<group>"; };
 		99819F3424C157B86629F7EE /* Pods-ClientConnectUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClientConnectUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ClientConnectUITests/Pods-ClientConnectUITests.release.xcconfig"; sourceTree = "<group>"; };
 		9E35B6191F48AF3D003425EB /* MyJob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyJob.swift; sourceTree = "<group>"; };
@@ -139,6 +140,7 @@
 		35F1146F1F2F8576001ADF8E /* ClientConnect */ = {
 			isa = PBXGroup;
 			children = (
+				5E6DF6731F4CB80400378665 /* ClientConnect.entitlements */,
 				35F114701F2F8576001ADF8E /* AppDelegate.swift */,
 				35F114721F2F8576001ADF8E /* ViewController.swift */,
 				35F114741F2F8576001ADF8E /* Main.storyboard */,
@@ -260,7 +262,13 @@
 				TargetAttributes = {
 					35F1146C1F2F8576001ADF8E = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = PLJ6V97WG3;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					35F114801F2F8576001ADF8E = {
 						CreatedOnToolsVersion = 8.3.3;
@@ -624,6 +632,8 @@
 			baseConfigurationReference = 14E009215BFF2C8EB25081B7 /* Pods-ClientConnect.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ClientConnect/ClientConnect.entitlements;
+				DEVELOPMENT_TEAM = PLJ6V97WG3;
 				INFOPLIST_FILE = ClientConnect/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = H.ClientConnect;
@@ -637,6 +647,8 @@
 			baseConfigurationReference = 7749FB55E9AECD91BEA95407 /* Pods-ClientConnect.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ClientConnect/ClientConnect.entitlements;
+				DEVELOPMENT_TEAM = PLJ6V97WG3;
 				INFOPLIST_FILE = ClientConnect/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = H.ClientConnect;

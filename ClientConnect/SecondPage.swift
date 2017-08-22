@@ -93,8 +93,8 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         let this = "/"+currentTask!.getName()+"/"+trimmed
         let stringUrl = "/sos/"+String(currentTask!.getId())+this
         let fullUrl = "http:/"+computerName+":8080"+stringUrl+"/"+notes
-        //let urlPath = NSString(format: fullUrl as NSString).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-        let url = URL(string: fullUrl)
+        let urlPath = NSString(format: fullUrl as NSString).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+        let url = URL(string: urlPath)
         print(url ?? "none")
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -113,8 +113,8 @@ class SecondPage: UIViewController,UITableViewDataSource, UITableViewDelegate
         let this = "/"+String(currentTask!.getId())+"/"+currentTask!.getName()+"/"+trimmed
         let stringUrl = "/finish/"+userId+this
         let fullUrl = "http:/"+computerName+":8080"+stringUrl+"/"+notes
-        //let urlPath = NSString(format: fullUrl as NSString).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-        let url = URL(string: fullUrl)
+        let urlPath = NSString(format: fullUrl as NSString).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+        let url = URL(string: urlPath)
         let semaphore = DispatchSemaphore(value: 0)
         
         let task = URLSession.shared.dataTask(with: url!) {(data, response, error) in
